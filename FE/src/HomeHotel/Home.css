@@ -1,0 +1,113 @@
+
+header{
+  box-shadow: 9px 9px 9px #999;
+}
+
+.textFooter {
+  display: flex;
+  flex-direction: column;
+
+}
+footer {
+  margin-top: auto; 
+}
+
+
+.image-container {
+  position: relative;
+  width: 50%;
+  height: auto;
+  overflow: hidden;
+  margin-top: auto;
+
+  margin-bottom: 0px;
+  margin-right: 0px;
+  
+}
+
+.fotoCarusel {
+  width: 549; /* La imagen ocupará el 100% del ancho */
+  height: 609px; /* La altura se ajustará proporcionalmente */
+  margin-left: 55px;
+  border-radius: 15px;
+  box-shadow: 9px 9px 9px #999;
+  margin-bottom: 0px;
+}
+
+
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: transparent;
+  text-decoration-color: black;
+  padding: 10px 20px;
+}
+
+.flex-container div {
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  position: relative; 
+  flex-grow: 1;
+}
+
+.left-content {
+  flex-basis: 30%; 
+  background-color: #f9f9f9;
+  max-width: 25%;
+}
+
+
+.custom-link {
+  
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: grey;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 9px 9px 9px #999;
+}
+
+.custom-link:hover {background-color: grey}
+
+.custom-link:active {
+  background-color: grey;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
+.custom-link:hover {
+  background-color: grey;
+}
+
+
+.right-content {
+  flex-grow: 10;
+  
+}
+
+
+
+
+
+
+
+

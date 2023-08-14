@@ -1,0 +1,190 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.flex-container {
+
+  display: flex;
+  justify-content: space-between;
+  }
+header {
+  background-color: #000;
+  color: #fff;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  padding: 10px;
+  
+}
+
+.textHeader1{
+  text-decoration-color: darkgreen;
+ 
+}
+
+.textHeader2{
+  margin-right: 800px;
+}
+
+
+footer {
+  background-color: black;
+  color: #fff;
+  text-align: left;
+  padding: 40px;
+  margin-bottom: 0px;
+  border-color: white;
+  border-style:groove;
+  margin-top: 34%;
+  height:120px;
+
+}
+
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.task-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.task-item .task-checkbox {
+  margin-right: 10px;
+}
+
+.task-item .task-text {
+  flex: 1;
+}
+
+.task-item .task-delete {
+  margin-left: 10px;
+}
+
+.task-item .task-strike {
+  margin-left: 10px;
+}
+
+.input-bar {
+  width: 100%;
+  max-width: 500px;
+  height: 30px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 5px 20px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.tachado {
+  text-decoration: line-through;
+}
+
+
+
+/*html {
+    background: green ;  
+    height: 100%;
+    display: flex;
+  }
+  body {
+    width: 100%;
+    margin: auto;
+    margin: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .App {
+    font-family: sans-serif;
+    text-align: center;
+  }
+
+.checkbox {
+  background-color: aqua;
+}
+
+.chekCaja {
+  background-color: red;
+}
+
+.BotonBorrar{}
+button {
+  width: 150px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  
+  border: none;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+  background: red;
+ }
+ 
+ button, button span {
+  transition: 200ms;
+ }
+ 
+ button .text {
+  transform: translateX(35px);
+  color: white;
+  font-weight: bold;
+ }
+ 
+ button .icon {
+  position: absolute;
+  border-left: 1px solid red;
+  transform: translateX(110px);
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+ 
+ button svg {
+  width: 15px;
+  fill: #eee;
+ }
+ 
+ button:hover {
+  background: #414141;
+ }
+ 
+ button:hover .text {
+  color: transparent;
+ }
+ 
+ button:hover .icon {
+  width: 150px;
+  border-left: none;
+  transform: translateX(0);
+ }
+ 
+ button:focus {
+  outline: none;
+ }
+ 
+ button:active .icon svg {
+  transform: scale(0.8);
+ }*/
+
