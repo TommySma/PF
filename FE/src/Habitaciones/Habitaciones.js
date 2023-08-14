@@ -4,9 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import { Link } from "react-router-dom";
 import fotoHeader from "../imagenes/haderImage.jpg";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 const Habitaciones = () => {
   const [Habitaciones, setHabitaciones] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     axios.get('http://localhost:5000/Habitacion')
@@ -18,6 +26,25 @@ const Habitaciones = () => {
         console.error(error);
       });
   }, []);
+
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const addHab = (index) => {
+    Habitaciones[index] = (inputValue);
+    const insertHab = [...Habitaciones];
+    setHabitaciones(insertHab);
+    axios.post('http://localhost:5000/Habitacion/' + Habitaciones[index].idHabitacion)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>
@@ -46,6 +73,39 @@ const Habitaciones = () => {
           ))}
         </div>
       </div>
+
+      <center><Button variant="primary" onClick={handleShow} style={{padding:'1%', marginBottom:'5%'}}> AGREGAR HABITACION</Button></center>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Complete los datos de la habitacion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>ingrese</Form.Label>
+              <Form.Control
+                type="text" className="input-bar" placeholder="Ingrese una tarea (máx. 50 palabras)" value={inputValue} onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Example textarea</Form.Label>
+              <Form.Control as="textarea" rows={3} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button className="button" onClick={addHab} style={{marginLeft:'5%'}}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <footer style={{ marginTop: '0%', height: '20px' }}>
       <p className='textFooter'>SAIRUKSIA TEAM</p>
