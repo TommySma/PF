@@ -27,6 +27,8 @@ app.get('/tarea', cors(), async (req, res) => {
 
 })
 
+//FUNCIONA
+
 app.get('/tarea/:id', async (req, res) => {
     console.log("asdasd", req.params);
     const tarea = await hotelServices.getById(req.params.id)
@@ -34,11 +36,15 @@ app.get('/tarea/:id', async (req, res) => {
 
 })
 
+//FUNCIONA
+
 app.get('/tarea', async (req, res) => {
     const tarea = await hotelServices.getALL()
     res.status(200).send(tarea) 
 
 })
+
+//FUNCIONA
 
 app.post('/tarea', async (req, res) => {
     console.log("en post, req:", req)
@@ -51,9 +57,12 @@ app.post('/tarea', async (req, res) => {
     }
 })  
 
+//FUNCIONA 
+
 app.delete('/tarea/:id', async (req, res) => {
     try {
-        await hotelServices.deleteById(req.params.idTarea);
+        console.log(req.params);
+        await hotelServices.deleteById(req.params.id);
         res.status(200).json({ message: 'tarea Eliminada'});
     } catch(error) {
         console.log(error);
@@ -75,7 +84,7 @@ app.put('/tarea/:id', async (req, res) => {
 //------------------------------------------HABITACION---------------------------------------------
 
 
-app.put('/habitacion/:id', async (req, res) => {
+/*app.put('/habitacion/:id', async (req, res) => {
     try {
         await hotelServices.updateHab(req.params.idHab, req.body);
         res.status(200).json({ message: 'habitacion Actualizada'});
@@ -97,5 +106,5 @@ app.get('/habitacion', async (req, res) => {
     const Habitacion = await hotelServices.getAllHab()
     res.status(200).send(Habitacion)
 })
-
+*/
 

@@ -37,7 +37,7 @@ function App() {
     tasks[index.tachado] = null;
     const updatedTasks = [...tasks];
     setTasks(updatedTasks);
-    axios.post('http://localhost:5000/tarea/' + tasks[index].idTarea)
+    axios.post('http://localhost:5000/tarea/' + tasks[index].IdTarea)
       .then((response) => {
         console.log(response);
       })
@@ -59,7 +59,7 @@ function App() {
     //updatedTasks[index] = <strike>{updatedTasks[index]}</strike>;
     setTasks(updatedTasks);
 
-    axios.put('http://localhost:5000/tarea/' + tasks[index].idTarea)
+    axios.put('http://localhost:5000/tarea/' + tasks[index].IdTarea)
       .then((response) => {
         console.log(response);
       })

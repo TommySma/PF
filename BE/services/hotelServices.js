@@ -60,7 +60,7 @@ export class hotelServices {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int,idTarea)
-                .query("UPDATE Tareas SET tachado=1 WHERE idTarea = @pId");
+                .query("UPDATE Tareas SET tachado=1 WHERE IdTarea = @pId");
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
@@ -71,12 +71,14 @@ export class hotelServices {
     static deleteById = async (idTarea) => {
         let rowsAffected = 0;
         console.log('Estoy en: hotelServices.deleteBy(idTarea)');
+        console.log(idTarea+"csacsa" );
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int, idTarea)
-                .query("DELETE FROM Tareas WHERE idTarea = '@pId'");
+                .query('DELETE FROM Tareas WHERE IdTarea = @pId');
             rowsAffected = result.rowsAffected;
+            console.log(rowsAffected)
         } catch (error) {
             console.log(error)
         }
