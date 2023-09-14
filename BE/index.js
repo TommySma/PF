@@ -84,7 +84,7 @@ app.put('/tarea/:id', async (req, res) => {
 //------------------------------------------HABITACION---------------------------------------------
 
 
-/*app.put('/habitacion/:id', async (req, res) => {
+app.put('/habitacion/:id', async (req, res) => {
     try {
         await hotelServices.updateHab(req.params.idHab, req.body);
         res.status(200).json({ message: 'habitacion Actualizada'});
@@ -106,5 +106,5 @@ app.get('/habitacion', async (req, res) => {
     const Habitacion = await hotelServices.getAllHab()
     res.status(200).send(Habitacion)
 })
-*/
+
 
