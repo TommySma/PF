@@ -10,7 +10,7 @@ import Modal from 'react-bootstrap/Modal';
 const Habitaciones = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [show, setShow] = useState(false);
-  const [selectedRoomId, setSelectedRoomId] = useState(null); // Guardar la habitación seleccionada para cambiar el estado
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
   const [newStatus, setNewStatus] = useState('');
 
   const handleClose = () => {
@@ -40,14 +40,15 @@ const Habitaciones = () => {
       });
   };
 
-  const changeRoomStatus = (newStatus) => {
-    if (selectedRoomId) {
+  const changeRoomStatus = () => {
+    if (selectedRoomId && newStatus) {
       axios
         .put(`http://localhost:5000/Habitacion/${selectedRoomId}`, {
           Estado: newStatus,
         })
         .then((response) => {
           console.log(response);
+
           fetchHabitaciones();
           handleClose();
         })
@@ -80,43 +81,43 @@ const Habitaciones = () => {
         className="container"
         style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}
       >
-        <div className="row">
-          {habitaciones.map((habitacion) => (
-            <div className="col-md-3 mb-4" key={habitacion.id}>
-              <Card
-                style={{
-                  width: '18rem',
-                  backgroundColor:
-                    habitacion.Estado === 'L'
-                      ? 'green'
-                      : habitacion.Estado === 'R'
-                      ? 'yellow'
-                      : habitacion.Estado === 'O'
-                      ? 'red'
-                      : 'black',
-                  color: 'black',
-                }}
-              >
-                <Card.Img variant="top" src={habitacion.Foto} />
-                <Card.Body>
-                  <Card.Title>
-                    <p>
-                      Numero de la Habitacion:<br />{' '}
-                      <center> {habitacion.numeroHab}</center>
-                    </p>
-                  </Card.Title>
-                  <Button
-                    variant="primary"
-                    onClick={() => handleShow(habitacion.id)}
-                    style={{ margin: '5px' }}
-                  >
-                    Cambiar Estado
-                  </Button>
-                </Card.Body>
-              </Card>
-            </div>
-          ))}
-        </div>
+<div className="row">
+        {habitaciones.map((habitacion) => (
+          <div className="col-md-3 mb-4" key={habitacion.id}>
+            <Card
+              style={{
+                width: '18rem',
+                backgroundColor:
+                  habitacion.Estado === 'L'
+                    ? 'green'
+                    : habitacion.Estado === 'R'
+                    ? 'yellow'
+                    : habitacion.Estado === 'O'
+                    ? 'red'
+                    : 'black',
+                color: 'black',
+              }}
+            >
+              <Card.Img variant="top" src={habitacion.Foto} />
+              <Card.Body>
+                <Card.Title>
+                  <p>
+                    Numero de la Habitacion:<br />{' '}
+                    <center> {habitacion.numeroHab}</center>
+                  </p>
+                </Card.Title>
+                <Button
+                  variant="primary"
+                  onClick={() => handleShow(habitacion.id)}
+                  style={{ margin: '5px' }}
+                >
+                  Cambiar Estado
+                </Button>
+              </Card.Body>
+            </Card>
+          </div>
+        ))}
+      </div>
       </div>
 
       <Modal show={show} onHide={handleClose}>
@@ -128,8 +129,8 @@ const Habitaciones = () => {
           <Button
             variant="success"
             onClick={() => {
-              changeRoomStatus('L');
               setNewStatus('L');
+              changeRoomStatus();
             }}
             style={{ margin: '5px' }}
           >
@@ -138,8 +139,8 @@ const Habitaciones = () => {
           <Button
             variant="warning"
             onClick={() => {
-              changeRoomStatus('R');
               setNewStatus('R');
+              changeRoomStatus();
             }}
             style={{ margin: '5px' }}
           >
@@ -148,8 +149,8 @@ const Habitaciones = () => {
           <Button
             variant="danger"
             onClick={() => {
-              changeRoomStatus('O');
               setNewStatus('O');
+              changeRoomStatus();
             }}
             style={{ margin: '5px' }}
           >
@@ -157,7 +158,7 @@ const Habitaciones = () => {
           </Button>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose}>    
             Cerrar
           </Button>
         </Modal.Footer>
