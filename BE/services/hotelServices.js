@@ -93,14 +93,18 @@ export class hotelServices {
     
     static updateHab = async (idHabitacion, habitacion) => {
         let returnEntity = null;
-        console.log(habitacion);
+        console.log("FLECHITA!!!");
+        console.log(habitacion, idHabitacion);
         console.log('Estoy en: hotelServices.update(idHabitacion)');
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
-                .input('pEstado', Habitacion.Estado)
-                .query("UPDATE Habitacion SET , Estado=@pEstado WHERE idHabitacion = @pId");
-            returnEntity = result.recordsets[0][0];
+                .input('pEstado', habitacion.Estado)
+                .input('pId', idHabitacion)
+                .query("UPDATE Habitacion SET Estado=@pEstado WHERE idHabitacion = @pId");
+            returnEntity = result.recordsets;
+
+            console.log("FLECHA!!!", returnEntity);
         } catch (error) {
             console.log(error);
         }

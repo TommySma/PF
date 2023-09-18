@@ -84,9 +84,10 @@ app.put('/tarea/:id', async (req, res) => {
 //------------------------------------------HABITACION---------------------------------------------
 
 
-app.put('/habitacion/:id', async (req, res) => {
+app.put('/habitacion', async (req, res) => {
     try {
-        await hotelServices.updateHab(req.params.idHab, req.body);
+        console.log(req.body.id, req.body)
+        await hotelServices.updateHab(req.body.id, req.body);
         res.status(200).json({ message: 'habitacion Actualizada'});
     } catch(error) {
         console.log(error);
