@@ -11,12 +11,10 @@ const Habitaciones = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [newStatus, setNewStatus] = useState('');
 
   const handleClose = () => {
     setShow(false);
     setSelectedRoomId(null);
-    setNewStatus('');
   };
 
   const handleShow = (roomId) => {
@@ -40,16 +38,19 @@ const Habitaciones = () => {
       });
   };
 
-  const changeRoomStatus = () => {
+  const changeRoomStatus = (newStatus) => {
     if (selectedRoomId && newStatus) {
       axios
-        .put(`http://localhost:5000/Habitacion/${selectedRoomId}`, {
+        .put(`http://localhost:5000/habitacion`, {
           Estado: newStatus,
+          id: selectedRoomId,
         })
         .then((response) => {
           console.log(response);
 
+          // Actualiza la lista de habitaciones después de cambiar el estado.
           fetchHabitaciones();
+
           handleClose();
         })
         .catch((error) => {
@@ -60,7 +61,7 @@ const Habitaciones = () => {
 
   return (
     <div>
-      <header style={{ backgroundImage: `url(${fotoHeader})` }}>
+      <header style={{ backgroundColor:'#556B2F' }}>
         <div className="flex-container">
           <div>
             <h1 className="textHeader1">
@@ -76,24 +77,21 @@ const Habitaciones = () => {
           </center>
         </div>
       </header>
-
-      <div
-        className="container"
-        style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}
-      >
+ <body style={{backgroundcolor: '#A9A9A9'}}>
+      <div className="container" style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
 <div className="row">
         {habitaciones.map((habitacion) => (
-          <div className="col-md-3 mb-4" key={habitacion.id}>
+          <div className="col-md-3 mb-4" key={habitacion.idHabitacion}>
             <Card
               style={{
                 width: '18rem',
                 backgroundColor:
                   habitacion.Estado === 'L'
-                    ? 'green'
+                    ? '#556B2F'
                     : habitacion.Estado === 'R'
-                    ? 'yellow'
+                    ? '#EEE8AA'
                     : habitacion.Estado === 'O'
-                    ? 'red'
+                    ? '#8B0000'
                     : 'black',
                 color: 'black',
               }}
@@ -108,7 +106,7 @@ const Habitaciones = () => {
                 </Card.Title>
                 <Button
                   variant="primary"
-                  onClick={() => handleShow(habitacion.id)}
+                  onClick={() => handleShow(habitacion.idHabitacion)}
                   style={{ margin: '5px' }}
                 >
                   Cambiar Estado
@@ -128,20 +126,14 @@ const Habitaciones = () => {
           <p>Seleccione el nuevo estado:</p>
           <Button
             variant="success"
-            onClick={() => {
-              setNewStatus('L');
-              changeRoomStatus();
-            }}
+            onClick={() => { changeRoomStatus('L');}}
             style={{ margin: '5px' }}
           >
             Libre
           </Button>
           <Button
             variant="warning"
-            onClick={() => {
-              setNewStatus('R');
-              changeRoomStatus();
-            }}
+            onClick={() => {changeRoomStatus('R');}}
             style={{ margin: '5px' }}
           >
             Reservada
@@ -149,9 +141,7 @@ const Habitaciones = () => {
           <Button
             variant="danger"
             onClick={() => {
-              setNewStatus('O');
-              changeRoomStatus();
-            }}
+              changeRoomStatus('O');}}
             style={{ margin: '5px' }}
           >
             Ocupada
@@ -163,8 +153,8 @@ const Habitaciones = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      <footer style={{ marginTop: '0%', height: '20px' }}>
+      </body>
+      <footer style={{ backgroundColor:'#556B2F' ,marginTop: '0%', height: '20px' }}>
         <p className="textFooter">SAIRUKSIA TEAM</p>
       </footer>
     </div>
