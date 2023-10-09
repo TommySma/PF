@@ -108,4 +108,16 @@ app.get('/habitacion', async (req, res) => {
     res.status(200).send(Habitacion)
 })
 
+// ---------------------------------------------RESERVA----------------------------------------------------------
 
+
+app.post('/reserva', async (req, res) => {
+    console.log("en post, req:", req)
+    try {
+        await hotelServices.insertReserva(req.body)
+        res.status(200).json({ message: 'reserva creada' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Fallo el insert' });
+    }
+})  

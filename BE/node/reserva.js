@@ -1,10 +1,12 @@
 class reserva {
-    idReserva;
-    fk_habitacion;
+    dni;
     fechaFin;
     fechaInicio;   
-    precio;
-    fk_huesped
+    nombre;
+    apellido;
+    NroHabitacion;
+    mail;
+    telefono;
 }
 
 export default reserva;

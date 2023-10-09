@@ -139,5 +139,35 @@ export class hotelServices {
         }
         return returnEntity;
     }
+
+
+//-----------------------------------------------------------RESERVA------------------------------------------------------------------------//
+
+    
+static insertReserva = async (idReserva, reserva) => {
+    let returnEntity = null;
+    console.log("FLECHITA!!!");
+    console.log(reserva, idReserva);
+    console.log('Estoy en: hotelServices.update(idReserva)');
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('pMail', reserva.mail)
+            .input('pFechaIncio', reserva.fechaIncio)
+            .input('pFechaFinal', reserva.fechaFinal)
+            .input('pNombre', reserva.nombre)
+            .input('pApellido', reserva.apellido)
+            .input('pTelefono', reserva.telefono)
+            .input('pNroHab', reserva.NroHabitacion)
+            .input('pDni', reserva.dni)
+            .query("INSERT INTO Reserva (mail,fechaInicio,fechaFinal,nombre,apellido,telefono,NroHabitacion,dni) VALUES (@pMail,@pFechaIncio,@pFechaFinal,@pNombre,@pApellido,@pTelefono,@pNroHab,@pDni)");
+        returnEntity = result.recordsets;
+
+        console.log("FLECHA!!!", returnEntity);
+    } catch (error) {
+        console.log(error);
+    }
+    return returnEntity;
+}
 }
 export default hotelServices
