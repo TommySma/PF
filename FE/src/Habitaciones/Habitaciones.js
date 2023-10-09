@@ -32,6 +32,7 @@ const Habitaciones = () => {
       .then((response) => {
         console.log(response);
         setHabitaciones(response.data);
+        console.log(response.data)
       })
       .catch((error) => {
         console.error(error);

@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Habitaciones from "./Habitaciones/Habitaciones";
 import HomeHotel from "./HomeHotel/Home";
+import Reserva from './Reserva/Reserva';
 //import Link1 from "./Link1/Link1";
 
 
@@ -17,6 +18,7 @@ root.render(
       <Route path="/" element={<HomeHotel />} />
       <Route path="/Habitaciones" element={<Habitaciones />} />
       <Route path ="/App" element ={< App/>}/>
+      <Route path ="/Reserva" element ={< Reserva/>}/>
     </Routes>
   </BrowserRouter>,
   </React.StrictMode>
