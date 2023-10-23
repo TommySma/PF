@@ -4,9 +4,8 @@ class reserva {
     fechaInicio;   
     nombre;
     apellido;
-    NroHabitacion;
-    mail;
-    telefono;
+    NroHabitacion;  
+    idReserva;
 }
 
 export default reserva;

@@ -169,5 +169,36 @@ static insertReserva = async (idReserva, reserva) => {
     }
     return returnEntity;
 }
+
+
+static getAllReserva = async () => {
+    let returnEntity = null;
+    console.log('Estoy en: hotelServices.GetAll()');
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .query('SELECT * FROM Reserva');
+        returnEntity = result.recordsets[0];
+    } catch (error) {
+        console.log(error);
+    }
+    return returnEntity;
 }
+
+static getByIdReserva = async (idReserva) => {
+    let returnEntity = null;
+    console.log('Estoy en: hotelServices.GetById(idReserva)');
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('pId', sql.Int, idHabitacion)
+            .query('SELECT * FROM Reserva WHERE idReserva = @pId');
+        returnEntity = result.recordsets[0][0];
+    } catch (error) {
+        console.log(error);
+    }
+    return returnEntity;
+}
+}
+
 export default hotelServices

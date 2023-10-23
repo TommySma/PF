@@ -121,3 +121,15 @@ app.post('/reserva', async (req, res) => {
         res.status(500).json({ error: 'Fallo el insert' });
     }
 })  
+
+app.get('/reserva', async (req, res) => {
+    const Reserva = await hotelServices.getAllReserva()
+    res.status(200).send(Reserva)
+})
+
+app.get('/Reserva/:id', async (req, res) => {
+    console.log("asdasd", req.params);
+    const Reserva = await hotelServices.getByIdReserva(req.params.id)
+    res.status(200).send(Reserva)
+
+})
