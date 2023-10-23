@@ -1,39 +1,51 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Card from 'react-bootstrap/Card';
+import fotoHeader from '../imagenes/haderImage.jpg';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
-const Reserva = () => {
-  const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
-    documento: '',
-    mail: '',
-    fechaInicio: '',
-    fechaFin: ''
-  });
+import './Reserva.css';
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí puedes guardar la reserva, por ejemplo, usando Axios
-    // axios.post('/api/reserva', formData)
-    //   .then(response => {
-    //     console.log('Reserva guardada exitosamente');
-    //   })
-    //   .catch(error => {
-    //     console.error('Error al guardar la reserva:', error);
-    //   });
-  };
+const Reserva = (props) => {
+    const [reservas, setReservas] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedReserva, setSelectedReserva] = useState(null);
 
-  return (
-    <div>
-      <header style={{ backgroundColor:'#556B2F' }}>
+
+    const newReserva = props.location.state ? props.location.state.newReserva : null;
+
+    useEffect(() => {
+        fetchReservas();
+    }, []);
+
+    const fetchReservas = () => {
+        axios
+            .get('http://localhost:5000/Reserva')
+            .then((response) => {
+                console.log(response);
+                setReservas(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+    const showReservaModal = (reserva) => {
+        setSelectedReserva(reserva);
+        setShowModal(true);
+    };
+
+    const closeReservaModal = () => {
+        setSelectedReserva(null);
+        setShowModal(false);
+    };
+
+    return (
+       <div>
+                <header style={{ backgroundColor:'#556B2F' }}>
         <div className="flex-container">
           <div>
             <h1 className="textHeader1">
@@ -45,83 +57,55 @@ const Reserva = () => {
             </h1>
           </div>
           <center>
-            <h2 style={{ Color: 'black' }}> RESERVA</h2>
+            <h2 style={{ Color: 'black' }}> RESERVAS</h2>
           </center>
         </div>
       </header>
-      <body>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="nombre">
-            <Form.Label>Nombre Completo</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ingresa tu nombre completo"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-            />
-          </Form.Group>
+            <div>
+                    {reservas.map((reserva) => (
+                        <div key={reserva.idReserva} className="reserva-card">
+                            <h3>Habitación {reserva.NroHabitacion}</h3>
+                            <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
+                            <div className="button-group">
+                                <button onClick={() => showReservaModal(reserva)}>Ver más</button>
+                                <button>Check In</button>
+                                <button>Check Out</button>
+                            </div>
+                        </div>
+                    ))}
 
-          <Form.Group controlId="apellido">
-            <Form.Label>Apellido</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ingresa tu apellido"
-              name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
-            />
-          </Form.Group>
+                    <Modal show={showModal} onHide={closeReservaModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Detalles de la Reserva</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p>Nombre: {selectedReserva && `${selectedReserva.nombre} ${selectedReserva.apellido}`}</p>
+                            <p>Fecha de Inicio: {selectedReserva && selectedReserva.fechaInicio}</p>
+                            <p>Fecha de Fin: {selectedReserva && selectedReserva.fechaFin}</p>
+                            <p>Habitación: {selectedReserva && selectedReserva.NroHabitacion}</p>
+                            <p>dni: {selectedReserva && selectedReserva.dni}</p>
 
-          <Form.Group controlId="documento">
-            <Form.Label>Número de Documento</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Ingresa tu número de documento"
-              name="documento"
-              value={formData.documento}
-              onChange={handleChange}
-            />
-          </Form.Group>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={closeReservaModal}>
+                                Cerrar
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
 
-          <Form.Group controlId="mail">
-            <Form.Label>Mail</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Ingresa tu correo electrónico"
-              name="mail"
-              value={formData.mail}
-              onChange={handleChange}
-            />
-          </Form.Group>
+                    <div className="text-center mt-4">
+                        <Link to="/AgregarReserva">
+                             <Button variant="primary">Agregar Reserva</Button>
+                        </Link>
+                    </div>
 
-          <Form.Group controlId="fechaInicio">
-            <Form.Label>Fecha de Inicio de Reserva</Form.Label>
-            <Form.Control
-              type="date"
-              name="fechaInicio"
-              value={formData.fechaInicio}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="fechaFin">
-            <Form.Label>Fecha de Fin de Reserva</Form.Label>
-            <Form.Control
-              type="date"
-              name="fechaFin"
-              value={formData.fechaFin}
-              onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Guardar Reserva
-          </Button>
-        </Form>
-      </body>
-    </div>
-  );
+                    <footer style={{ backgroundColor: '#556B2F', marginTop: '0%', height: '20px' }}>
+                        <p className="textFooter">TAREFF TEAM</p>
+                    </footer>
+                </div>
+        </div>        
+    );
 };
+
 
 export default Reserva;

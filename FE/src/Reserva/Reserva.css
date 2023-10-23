@@ -1,0 +1,44 @@
+/* Reserva.css */
+
+.reserva-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+  }
+  
+  .reserva-card h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .reserva-card p {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .button-group button {
+    margin-right: 10px;
+  }
+  
+  .modal-content {
+    border-radius: 8px;
+  }
+  
+  .modal-header {
+    background-color: #556B2F;
+    color: #fff;
+    border-bottom: none;
+  }
+  
+  .modal-footer {
+    border-top: none;
+  }
+  
+  .textFooter {
+    color: #fff;
+    font-size: 14px;
+    margin: 0;
+  }
+  
