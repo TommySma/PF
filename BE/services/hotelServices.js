@@ -53,14 +53,16 @@ export class hotelServices {
 
 
     
-    static update = async (idTarea) => {
+    static update = async (idTarea, finalizada) => {
         let returnEntity = null;
         console.log('Estoy en: hotelServices.update(Tareas)');
+        console.log('Finalizada!!', finalizada);
         try {
             let pool = await sql.connect(config);
             let result = await pool.request()
                 .input('pId', sql.Int,idTarea)
-                .query("UPDATE Tareas SET tachado=1 WHERE IdTarea = @pId");
+                .input('pFinalizada', finalizada.finalizada)
+                .query("UPDATE Tareas SET finalizada=@pFinalizada WHERE IdTarea = @pId");
             returnEntity = result.recordsets[0];
         } catch (error) {
             console.log(error);
