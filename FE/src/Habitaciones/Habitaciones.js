@@ -3,14 +3,17 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
-import fotoHeader from '../imagenes/haderImage.jpg';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Reserva from '../Reserva/Reserva'; // Ajusta la ruta según la ubicación real
+
+
 
 const Habitaciones = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [roomStatus, setRoomStatus] = useState({});
 
   const handleClose = () => {
     setShow(false);
@@ -24,7 +27,7 @@ const Habitaciones = () => {
 
   useEffect(() => {
     fetchHabitaciones();
-  }, []);
+  }, [roomStatus]);
 
   const fetchHabitaciones = () => {
     axios
@@ -32,7 +35,6 @@ const Habitaciones = () => {
       .then((response) => {
         console.log(response);
         setHabitaciones(response.data);
-        console.log(response.data)
       })
       .catch((error) => {
         console.error(error);
@@ -48,16 +50,21 @@ const Habitaciones = () => {
         })
         .then((response) => {
           console.log(response);
-
-          // Actualiza la lista de habitaciones después de cambiar el estado.
           fetchHabitaciones();
-
           handleClose();
         })
         .catch((error) => {
           console.error(error);
         });
     }
+  };
+
+  const handleRoomStatusChange = (roomId, newStatus) => {
+    setRoomStatus(prevStatus => ({
+      ...prevStatus,
+      [roomId]: newStatus
+      
+    }));
   };
 
   return (
@@ -78,47 +85,46 @@ const Habitaciones = () => {
           </center>
         </div>
       </header>
- <body style={{backgroundcolor: '#A9A9A9'}}>
-      <div className="container" style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
-<div className="row">
-        {habitaciones.map((habitacion) => (
-          <div className="col-md-3 mb-4" key={habitacion.idHabitacion}>
-            <Card
-              style={{
-                width: '18rem',
-                backgroundColor:
-                  habitacion.Estado === 'L'
-                    ? '#556B2F'
-                    : habitacion.Estado === 'R'
-                    ? '#EEE8AA'
-                    : habitacion.Estado === 'O'
-                    ? '#8B0000'
-                    : 'black',
-                color: 'black',
-              }}
-            >
-              <Card.Img variant="top" src={habitacion.Foto} />
-              <Card.Body>
-                <Card.Title>
-                  <p>
-                    Numero de la Habitacion:<br />{' '}
-                    <center> {habitacion.numeroHab}</center>
-                  </p>
-                </Card.Title>
-                <Button
-                  variant="primary"
-                  onClick={() => handleShow(habitacion.idHabitacion)}
-                  style={{ margin: '5px' }}
+      <body style={{backgroundColor: '#A9A9A9'}}>
+        <div className="container" style={{ backgroundColor: 'transparent', borderColor: 'transparent' }}>
+          <div className="row">
+            {habitaciones.map((habitacion) => (
+              <div className="col-md-3 mb-4" key={habitacion.idHabitacion}>
+                <Card
+                  style={{
+                    width: '18rem',
+                    backgroundColor:
+                      roomStatus[habitacion.idHabitacion] === 'C' ? '#8B0000' :
+                      roomStatus[habitacion.idHabitacion] === 'O' ? '#556B2F' :
+                      habitacion.Estado === 'L' ? '#556B2F' :
+                      habitacion.Estado === 'R' ? '#EEE8AA' :
+                      habitacion.Estado === 'O' ? '#8B0000' :
+                      'black',
+                    color: 'black',
+                  }}
                 >
-                  Cambiar Estado
-                </Button>
-              </Card.Body>
-            </Card>
+                  <Card.Img variant="top" src={habitacion.Foto} />
+                  <Card.Body>
+                    <Card.Title>
+                      <p>
+                        Numero de la Habitacion:<br />{' '}
+                        <center> {habitacion.numeroHab}</center>
+                      </p>
+                    </Card.Title>
+                    <Button
+                      variant="primary"
+                      onClick={() => handleShow(habitacion.idHabitacion)}
+                      style={{ margin: '5px' }}
+                    >
+                      Cambiar Estado
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      </div>
-
+        </div>
+      </body>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Cambiar Estado de Reserva</Modal.Title>
@@ -141,23 +147,22 @@ const Habitaciones = () => {
           </Button>
           <Button
             variant="danger"
-            onClick={() => {
-              changeRoomStatus('O');}}
+            onClick={() => { changeRoomStatus('O'); }}
             style={{ margin: '5px' }}
           >
             Ocupada
           </Button>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>    
+          <Button variant="secondary" onClick={handleClose}>
             Cerrar
           </Button>
         </Modal.Footer>
       </Modal>
-      </body>
       <footer style={{ backgroundColor:'#556B2F' ,marginTop: '0%', height: '20px' }}>
-        <p className="textFooter">SAIRUKSIA TEAM</p>
+        <p className="textFooter">TAREFF TEAM</p>
       </footer>
+  
     </div>
   );
 };

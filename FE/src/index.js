@@ -3,31 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Habitaciones from "./Habitaciones/Habitaciones";
-import HomeHotel from "./HomeHotel/Home";
-import Reserva from './Reserva/Reserva';
-import AgregarReserva from './AgregarReserva/AgregarReserva';
-//import Link1 from "./Link1/Link1";
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-      <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<HomeHotel />} />
-      <Route path="/Habitaciones" element={<Habitaciones />} />
-      <Route path ="/App" element ={< App/>}/>
-      <Route path ="/AgregarReserva" element ={< AgregarReserva/>}/>
-      <Route path ="/Reserva" element ={< Reserva/>}/>
-    </Routes>
-  </BrowserRouter>,
-  </React.StrictMode>
+      <App />,
 );
-
-
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -1,51 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Card from 'react-bootstrap/Card';
-import fotoHeader from '../imagenes/haderImage.jpg';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
 import './Reserva.css';
+import Habitaciones from '../Habitaciones/Habitaciones';
 
+const Reserva = ({ handleRoomStatusChange }) => {
+  const [reservas, setReservas] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReserva, setSelectedReserva] = useState(null);
 
-const Reserva = (props) => {
-    const [reservas, setReservas] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [selectedReserva, setSelectedReserva] = useState(null);
+  useEffect(() => {
+    fetchReservas();
+  }, []);
 
+  const fetchReservas = () => {
+    axios
+      .get('http://localhost:5000/Reserva')
+      .then((response) => {
+        console.log(response);
+        setReservas(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-    const newReserva = props.location.state ? props.location.state.newReserva : null;
+  const showReservaModal = (reserva) => {
+    setSelectedReserva(reserva);
+    setShowModal(true);
+  };
 
-    useEffect(() => {
-        fetchReservas();
-    }, []);
+  const closeReservaModal = () => {
+    setSelectedReserva(null);
+    setShowModal(false);
+  };
 
-    const fetchReservas = () => {
-        axios
-            .get('http://localhost:5000/Reserva')
-            .then((response) => {
-                console.log(response);
-                setReservas(response.data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    };
+  const handleCheckIn = (reserva) => {
+    handleRoomStatusChange(reserva.idHabitacion, 'C');
+    // Resto del código
+  };
+  
+  const handleCheckOut = (reserva) => {
+    handleRoomStatusChange(reserva.idHabitacion, 'O');
+    // Resto del código
+  };
+  
 
-    const showReservaModal = (reserva) => {
-        setSelectedReserva(reserva);
-        setShowModal(true);
-    };
-
-    const closeReservaModal = () => {
-        setSelectedReserva(null);
-        setShowModal(false);
-    };
-
-    return (
-       <div>
-                <header style={{ backgroundColor:'#556B2F' }}>
+  return (
+    <div>
+      <header style={{ backgroundColor:'#556B2F' }}>
         <div className="flex-container">
           <div>
             <h1 className="textHeader1">
@@ -61,20 +67,20 @@ const Reserva = (props) => {
           </center>
         </div>
       </header>
-            <div>
-                    {reservas.map((reserva) => (
-                        <div key={reserva.idReserva} className="reserva-card">
-                            <h3>Habitación {reserva.NroHabitacion}</h3>
-                            <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
-                            <div className="button-group">
-                                <button onClick={() => showReservaModal(reserva)}>Ver más</button>
-                                <button>Check In</button>
-                                <button>Check Out</button>
-                            </div>
-                        </div>
-                    ))}
+      <div>
+        {reservas.map((reserva) => (
+          <div key={reserva.idReserva} className="reserva-card">
+            <h3>Habitación {reserva.NroHabitacion}</h3>
+            <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
+            <div className="button-group">
+              <button onClick={() => showReservaModal(reserva)}>Ver más</button>
+              <button onClick={() => handleCheckIn(reserva)}>Check In</button>
+              <button onClick={() => handleCheckOut(reserva)}>Check Out</button>
+            </div>
+          </div>
+        ))}
 
-                    <Modal show={showModal} onHide={closeReservaModal}>
+        <Modal show={showModal} onHide={closeReservaModal}>
                         <Modal.Header closeButton>
                             <Modal.Title>Detalles de la Reserva</Modal.Title>
                         </Modal.Header>
@@ -104,8 +110,7 @@ const Reserva = (props) => {
                     </footer>
                 </div>
         </div>        
-    );
+  );
 };
-
 
 export default Reserva;

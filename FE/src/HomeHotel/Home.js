@@ -18,7 +18,7 @@ const Home = () => {
       <div className="container" style={{ backgroundColor: 'transparent', borderColor: 'transparent', position: 'relative' }}>
         <div className='row'>
           <div className="left-content col-md-6" style={{ backgroundColor: 'transparent', marginTop: '15%' }}>
-            <Link to="/App" className="custom-link btn btn-lg btn-primary" style={{width:'330px' ,backgroundColor: '#556B2F', color: 'white', marginBottom: '17px' }}>VER LISTA DE TAREAS</Link>
+            <Link to="/Tareas" className="custom-link btn btn-lg btn-primary" style={{width:'330px' ,backgroundColor: '#556B2F', color: 'white', marginBottom: '17px' }}>VER LISTA DE TAREAS</Link>
             <Link to="/Habitaciones" className="custom-link btn btn-lg btn-primary" style={{width:'330px' ,backgroundColor: '#556B2F', color: 'white', marginTop:'60%' }}>VER HABITACIONES</Link>
             <Link to="/Reserva" className="custom-link btn btn-lg btn-primary" style={{width:'330px' ,backgroundColor: '#556B2F', color: 'white', marginTop:'60%' }}>RESERVAR HABITACIONES</Link>
 
