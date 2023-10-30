@@ -5,8 +5,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Reserva from '../Reserva/Reserva'; // Ajusta la ruta según la ubicación real
-
+import Reserva from '../Reserva/Reserva'; 
 
 
 const Habitaciones = () => {
@@ -63,7 +62,6 @@ const Habitaciones = () => {
     setRoomStatus(prevStatus => ({
       ...prevStatus,
       [roomId]: newStatus
-      
     }));
   };
 
@@ -125,6 +123,8 @@ const Habitaciones = () => {
           </div>
         </div>
       </body>
+
+      <Reserva handleRoomStatusChange={handleRoomStatusChange} />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Cambiar Estado de Reserva</Modal.Title>

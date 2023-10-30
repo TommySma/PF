@@ -29,18 +29,18 @@ function Tareas() {
 
   const addTask = () => {
     if (inputValue.trim() === '') {
-      return; // Evitar agregar tareas vacías
+      return; 
     }
 
     axios
       .post('http://localhost:5000/tarea', {
         descripcion: inputValue,
-        tachado: false, // Inicialmente, la tarea no está tachada
+        tachado: false, 
       })
       .then((response) => {
         console.log(response);
-        fetchTasks(); // Actualiza la lista de tareas después de agregar una nueva
-        setInputValue(''); // Limpia el campo de entrada
+        fetchTasks(); 
+        setInputValue(''); 
       })
       .catch((error) => {
         console.error(error);
@@ -52,8 +52,7 @@ function Tareas() {
       .delete(`http://localhost:5000/tarea/${taskId}`)
       .then((response) => {
         console.log(response);
-        // Aquí puedes decidir si deseas actualizar la lista de tareas después de la eliminación o no.
-        fetchTasks(); // Descomenta esta línea si deseas actualizar la lista de tareas.
+        fetchTasks(); 
       })
       .catch((error) => {
         console.error(error);
@@ -63,11 +62,11 @@ function Tareas() {
   const strikeTask = (taskId, isTachado) => {
     axios
       .put(`http://localhost:5000/tarea/${taskId}`, {
-        finalizada: !isTachado, // Invierte el estado de tachado
+        finalizada: !isTachado, 
       })
       .then((response) => {
         console.log(response);
-        fetchTasks(); // Actualiza la lista de tareas después de tachar/destachar una tarea
+        fetchTasks(); 
       })
       .catch((error) => {
         console.error(error);
@@ -97,7 +96,7 @@ function Tareas() {
               <input
                 type="text"
                 className="input-bar"
-                placeholder="Ingrese una tarea (máx. 50 palabras)"
+                placeholder="Ingrese una tarea (máx. 50 caracteres)"
                 value={inputValue}
                 onChange={handleInputChange}
               />

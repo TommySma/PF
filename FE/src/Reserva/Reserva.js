@@ -40,12 +40,12 @@ const Reserva = ({ handleRoomStatusChange }) => {
 
   const handleCheckIn = (reserva) => {
     handleRoomStatusChange(reserva.idHabitacion, 'C');
-    // Resto del código
+
   };
   
   const handleCheckOut = (reserva) => {
     handleRoomStatusChange(reserva.idHabitacion, 'O');
-    // Resto del código
+
   };
   
 
