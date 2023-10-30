@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Reserva from '../Reserva/Reserva'; 
+import { habitacionContext } from '../habitacionContext';
 
 
 const Habitaciones = () => {
   const [habitaciones, setHabitaciones] = useState([]);
   const [show, setShow] = useState(false);
   const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [roomStatus, setRoomStatus] = useState({});
+  const {estadoHabitacion, setEstadoHabitacion} = useContext(habitacionContext);
 
   const handleClose = () => {
     setShow(false);
@@ -26,7 +26,7 @@ const Habitaciones = () => {
 
   useEffect(() => {
     fetchHabitaciones();
-  }, [roomStatus]);
+  }, [estadoHabitacion]);
 
   const fetchHabitaciones = () => {
     axios
@@ -58,10 +58,10 @@ const Habitaciones = () => {
     }
   };
 
-  const handleRoomStatusChange = (roomId, newStatus) => {
-    setRoomStatus(prevStatus => ({
+  const handleRoomStatusChange = (NroHabitacion, newStatus) => {
+    setEstadoHabitacion(prevStatus => ({
       ...prevStatus,
-      [roomId]: newStatus
+      [NroHabitacion]: newStatus
     }));
   };
 
@@ -92,8 +92,8 @@ const Habitaciones = () => {
                   style={{
                     width: '18rem',
                     backgroundColor:
-                      roomStatus[habitacion.idHabitacion] === 'C' ? '#8B0000' :
-                      roomStatus[habitacion.idHabitacion] === 'O' ? '#556B2F' :
+                    estadoHabitacion[habitacion.idHabitacion] === 'C' ? '#8B0000' :
+                    estadoHabitacion[habitacion.idHabitacion] === 'O' ? '#556B2F' :
                       habitacion.Estado === 'L' ? '#556B2F' :
                       habitacion.Estado === 'R' ? '#EEE8AA' :
                       habitacion.Estado === 'O' ? '#8B0000' :
@@ -124,7 +124,6 @@ const Habitaciones = () => {
         </div>
       </body>
 
-      <Reserva handleRoomStatusChange={handleRoomStatusChange} />
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Cambiar Estado de Reserva</Modal.Title>

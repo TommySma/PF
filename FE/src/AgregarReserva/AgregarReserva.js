@@ -1,20 +1,17 @@
-/* import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-const AgregarReserva = () => {
+const AgregarReserva = ({ ReservaCreada }) => {
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
     documento: '',
     fechaInicio: '',
     fechaFin: '',
-    NroHabitacion: '',  // Agregamos este campo
-    idReserva: ''       
+    NroHabitacion: '',
+    idReserva: ''
   });
-
-  const history = useHistory();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,13 +23,8 @@ const AgregarReserva = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Enviar datos a Reserva
-    history.push({
-      pathname: '/Reserva',
-      state: { newReserva: formData }
-    });
+    ReservaCreada(formData);
   };
-
 
   return (
     <div>
@@ -119,4 +111,4 @@ const AgregarReserva = () => {
   );
 };
 
-export default AgregarReserva; */
+export default AgregarReserva;
