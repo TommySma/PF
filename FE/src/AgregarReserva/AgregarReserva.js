@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
 const AgregarReserva = ({ ReservaCreada }) => {
-  const [formData, setFormData] = useState({
+  const [inputValue, setInputValue] = useState('');
+  const [formData, setFormData] = useState
+  
+  ({
+    
     nombre: '',
     apellido: '',
     documento: '',
@@ -12,6 +17,8 @@ const AgregarReserva = ({ ReservaCreada }) => {
     NroHabitacion: '',
     idReserva: ''
   });
+
+ 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +31,23 @@ const AgregarReserva = ({ ReservaCreada }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     ReservaCreada(formData);
+    
+    const AgregaReserva = () => {
+    if (inputValue.trim() === '') 
+      return; 
+    }
+    axios
+    .post('http://localhost:5000/reserva', {
+      descripcion: inputValue,
+      tachado: false, 
+    })
+    .then((response) => {
+      console.log(response);
+      setInputValue(''); 
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
 
   return (
@@ -31,16 +55,9 @@ const AgregarReserva = ({ ReservaCreada }) => {
       <header style={{ backgroundColor:'#556B2F' }}>
         <div className="flex-container">
           <div>
-            <h1 className="textHeader1">
-              <b>
-                <Link style={{ color: 'white' }} to="/Reserva">
-                  ATRAS
-                </Link>
-              </b>
-            </h1>
           </div>
           <center>
-            <h2 style={{ Color: 'black' }}> RESERVA</h2>
+            <h2 style={{ color: 'black' }}> RESERVA</h2>
           </center>
         </div>
       </header>
@@ -79,9 +96,6 @@ const AgregarReserva = ({ ReservaCreada }) => {
             />
           </Form.Group>
 
-          
-          
-
           <Form.Group controlId="fechaInicio">
             <Form.Label>Fecha de Inicio de Reserva</Form.Label>
             <Form.Control
@@ -102,7 +116,7 @@ const AgregarReserva = ({ ReservaCreada }) => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button   variant="primary" type="submit">
             Guardar Reserva
           </Button>
         </Form>

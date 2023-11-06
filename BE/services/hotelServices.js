@@ -154,15 +154,12 @@ static insertReserva = async (idReserva, reserva) => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .input('pMail', reserva.mail)
             .input('pFechaIncio', reserva.fechaIncio)
             .input('pFechaFinal', reserva.fechaFinal)
             .input('pNombre', reserva.nombre)
             .input('pApellido', reserva.apellido)
-            .input('pTelefono', reserva.telefono)
-            .input('pNroHab', reserva.NroHabitacion)
             .input('pDni', reserva.dni)
-            .query("INSERT INTO Reserva (mail,fechaInicio,fechaFinal,nombre,apellido,telefono,NroHabitacion,dni) VALUES (@pMail,@pFechaIncio,@pFechaFinal,@pNombre,@pApellido,@pTelefono,@pNroHab,@pDni)");
+            .query("INSERT INTO Reserva (fechaInicio,fechaFinal,nombre,apellido,NroHabitacion,dni) VALUES (@pFechaIncio,@pFechaFinal,@pNombre,@pApellido,@pDni)");
         returnEntity = result.recordsets;
 
         console.log("FLECHA!!!", returnEntity);

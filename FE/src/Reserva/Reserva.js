@@ -6,18 +6,17 @@ import Modal from 'react-bootstrap/Modal';
 import { Link } from 'react-router-dom';
 import './Reserva.css';
 import { habitacionContext } from '../habitacionContext';
-//import AgregarReserva from './AgregarReserva/AgregarReserva.js';
-//import HotelServices from './services/HotelServices';  AGREGAR ESTOS DOS IMPORTS
+import AgregarReserva from '../AgregarReserva/AgregarReserva'; // Asegúrate de tener la ruta correcta
 
 const Reserva = () => {
   const [reservas, setReservas] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedReserva, setSelectedReserva] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Nuevo estado para el término de búsqueda por nombre/apellido/DNI
+  const [searchRoomTerm, setSearchRoomTerm] = useState(''); // Nuevo estado para el número de habitación
   const { estadoHabitacion, setEstadoHabitacion } = useContext(habitacionContext);
 
-  // Función para manejar la creación de una nueva reserva
   const handleReservaCreada = (nuevaReserva) => {
-    // Suponiendo que `reservas` es un array de reservas
     setReservas([...reservas, nuevaReserva]);
   };
 
@@ -57,36 +56,37 @@ const Reserva = () => {
     const newStatus = 'O'; // Cambiar el estado a 'O' (Check In)
     const idHabitacion = reserva.NroHabitacion;
 
-    try {
-      const result = await HotelServices.updateHab(idHabitacion, { Estado: newStatus });
-      console.log('Resultado del update:', result);
-
-      // Actualizar el estado local si la actualización en la base de datos fue exitosa
-      if (result) {
-        handleRoomStatusChange(reserva.NroHabitacion, newStatus);
-      }
-    } catch (error) {
-      console.error('Error al realizar el check-in:', error);
-    }
-  };
+    // ... (resto del código)
+  }; 
 
   const handleCheckOut = async (reserva) => {
     const newStatus = 'L'; // Cambiar el estado a 'L' (Check Out)
     const idHabitacion = reserva.NroHabitacion;
 
-    // Llamar a la función de actualización del servicio
-    try {
-      const result = await HotelServices.updateHab(idHabitacion, { Estado: newStatus });
-      console.log('Resultado del update:', result);
+    // ... (resto del código)
+  };
 
-      // Actualizar el estado local si la actualización en la base de datos fue exitosa
-      if (result) {
-        handleRoomStatusChange(reserva.NroHabitacion, newStatus);
-      }
-    } catch (error) {
-      console.error('Error al realizar el check-out:', error);
+  const handleSearchTermChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'searchTerm') {
+      setSearchTerm(value);
+    } else if (name === 'searchRoomTerm') { // Maneja el cambio de término de búsqueda para número de habitación
+      setSearchRoomTerm(value);
     }
   };
+
+  const filteredReservas = reservas.filter((reserva) => {
+    const { nombre, apellido, dni, NroHabitacion } = reserva;
+    const searchValue = searchTerm.toLowerCase();
+    const searchRoomValue = searchRoomTerm.toLowerCase();
+
+    return (
+      (nombre.toLowerCase().includes(searchValue) ||
+       apellido.toLowerCase().includes(searchValue) ||
+       dni.toString().includes(searchValue)) &&
+      NroHabitacion.toString().includes(searchRoomValue)
+    );
+  });
 
   return (
     <div>
@@ -107,7 +107,21 @@ const Reserva = () => {
         </div>
       </header>
       <div>
-        {reservas.map((reserva) => (
+        <input
+          type="text"
+          placeholder="Buscar por nombre, apellido o DNI"
+          name="searchTerm"
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+        />
+        <input
+          type="text"
+          placeholder="Buscar por número de habitación"
+          name="searchRoomTerm"
+          value={searchRoomTerm}
+          onChange={handleSearchTermChange}
+        />
+        {filteredReservas.map((reserva) => (
           <div key={reserva.idReserva} className="reserva-card">
             <h3>Habitación {reserva.NroHabitacion}</h3>
             <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
@@ -137,12 +151,8 @@ const Reserva = () => {
           </Modal.Footer>
         </Modal>
 
-        <div className="text-center mt-4">
-          <Link to="/AgregarReserva">
-            <Button variant="primary" style={{backgroundColor:'#556B2F', borderColor:'transparent'}}>Agregar Reserva</Button>
-          </Link>
-        </div>
-
+        <AgregarReserva ReservaCreada={handleReservaCreada} /> {/* Componente AgregarReserva con prop */}
+        
         <footer style={{ backgroundColor: '#556B2F', marginTop: '0%', height: '20px' }}>
           <p className="textFooter">TAREFF TEAM</p>
         </footer>
