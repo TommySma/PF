@@ -6,6 +6,10 @@ const app = express();
 import { hotelServices } from "./services/hotelServices.js";
 
 
+/*const express = require('express');
+const router = express.Router();
+const hotelServices = require('./path/hotelServices'); */
+
 app.use(cors());
 
 const port = 5000;
@@ -96,6 +100,17 @@ app.put('/habitacion', async (req, res) => {
 
 })
 
+/*router.put('/habitacion/:idHabitacion', async (req, res) => {
+    const { idHabitacion } = req.params;
+    const { estadoReserva } = req.body;
+  
+    const result = await hotelServices.updateHab(idHabitacion, { estadoReserva });
+  
+    res.json(result);
+  });
+  
+  module.exports = router;*/
+
 app.get('/habitacion/:id', async (req, res) => {
     console.log("asdasd", req.params);
     const Habitacion = await hotelServices.getByIdHab(req.params.id)
@@ -130,6 +145,6 @@ app.get('/reserva', async (req, res) => {
 app.get('/Reserva/:id', async (req, res) => {
     console.log("asdasd", req.params);
     const Reserva = await hotelServices.getByIdReserva(req.params.id)
-    res.status(200).send(Reserva)
+    res.status(200).send(Reserva)    
 
 })

@@ -99,16 +99,16 @@ export class hotelServices {
         console.log(habitacion, idHabitacion);
         console.log('Estoy en: hotelServices.update(idHabitacion)');
         try {
-            let pool = await sql.connect(config);
-            let result = await pool.request()
-                .input('pEstado', habitacion.Estado)
-                .input('pId', idHabitacion)
-                .query("UPDATE Habitacion SET Estado=@pEstado WHERE idHabitacion = @pId");
-            returnEntity = result.recordsets;
-
-            console.log("FLECHA!!!", returnEntity);
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('pEstado', habitacion.estadoReserva)
+            .input('pId', idHabitacion)
+            .query("UPDATE Habitacion SET EstadoReserva=@pEstado WHERE idHabitacion = @pId");
+        returnEntity = result.recordsets;
+    
+        console.log("FLECHA!!!", returnEntity);
         } catch (error) {
-            console.log(error);
+        console.log(error);
         }
         return returnEntity;
     }
@@ -146,20 +146,21 @@ export class hotelServices {
 //-----------------------------------------------------------RESERVA------------------------------------------------------------------------//
 
     
-static insertReserva = async (idReserva, reserva) => {
+static insertReserva = async (reserva) => {
     let returnEntity = null;
     console.log("FLECHITA!!!");
-    console.log(reserva, idReserva);
+    console.log(reserva);
     console.log('Estoy en: hotelServices.update(idReserva)');
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .input('pFechaIncio', reserva.fechaIncio)
-            .input('pFechaFinal', reserva.fechaFinal)
+            .input('pFechaIncio', reserva.fechaInicio)
+            .input('pFechaFin', reserva.fechaFin)
             .input('pNombre', reserva.nombre)
             .input('pApellido', reserva.apellido)
             .input('pDni', reserva.dni)
-            .query("INSERT INTO Reserva (fechaInicio,fechaFinal,nombre,apellido,NroHabitacion,dni) VALUES (@pFechaIncio,@pFechaFinal,@pNombre,@pApellido,@pDni)");
+            .input('pNroHabitacion', reserva.NroHabitacion)
+            .query("INSERT INTO Reserva (fechaInicio,fechaFin,NroHabitacion,nombre,apellido,dni) VALUES (@pFechaIncio,@pFechaFin,@pNroHabitacion,@pNombre,@pApellido,@pDni)");
         returnEntity = result.recordsets;
 
         console.log("FLECHA!!!", returnEntity);
