@@ -3,18 +3,19 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Reserva.css';
 import { habitacionContext } from '../habitacionContext';
-import AgregarReserva from '../AgregarReserva/AgregarReserva'; // Asegúrate de tener la ruta correcta
+import AgregarReserva from '../AgregarReserva/AgregarReserva';
 
 const Reserva = () => {
   const [reservas, setReservas] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedReserva, setSelectedReserva] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(''); // Nuevo estado para el término de búsqueda por nombre/apellido/DNI
-  const [searchRoomTerm, setSearchRoomTerm] = useState(''); // Nuevo estado para el número de habitación
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchRoomTerm, setSearchRoomTerm] = useState('');
   const { estadoHabitacion, setEstadoHabitacion } = useContext(habitacionContext);
+  const location = useLocation();
 
   const handleReservaCreada = (nuevaReserva) => {
     setReservas([...reservas, nuevaReserva]);
@@ -29,6 +30,7 @@ const Reserva = () => {
       .get('http://localhost:5000/Reserva')
       .then((response) => {
         setReservas(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -53,43 +55,40 @@ const Reserva = () => {
   };
 
   const handleCheckIn = async (reserva) => {
-    const newStatus = 'O'; // Cambiar el estado a 'O' (Check In)
-    const idHabitacion = reserva.NroHabitacion;
-
-    // ... (resto del código)
-  }; 
+    try {
+      const newStatus = 'O';
+      const idHabitacion = reserva.idHabitacion; // Asegúrate de que esta propiedad esté disponible en tu objeto reserva
+  
+      // Lógica para el Check In
+      await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { estadoReserva: newStatus });
+  
+      // Actualiza localmente el estado de la habitación (opcional)
+      const updatedReservas = reservas.map((r) =>
+        r.idHabitacion === idHabitacion ? { ...r, estadoReserva: newStatus } : r
+      );
+      setReservas(updatedReservas);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleCheckOut = async (reserva) => {
-    const newStatus = 'L'; // Cambiar el estado a 'L' (Check Out)
+    const newStatus = 'L'; 
     const idHabitacion = reserva.NroHabitacion;
-
-    // ... (resto del código)
+    // Lógica para el Check Out
   };
 
   const handleSearchTermChange = (e) => {
     const { name, value } = e.target;
     if (name === 'searchTerm') {
       setSearchTerm(value);
-    } else if (name === 'searchRoomTerm') { // Maneja el cambio de término de búsqueda para número de habitación
+    } else if (name === 'searchRoomTerm') {
       setSearchRoomTerm(value);
     }
   };
 
-  const filteredReservas = reservas.filter((reserva) => {
-    const { nombre, apellido, dni, NroHabitacion } = reserva;
-    const searchValue = searchTerm.toLowerCase();
-    const searchRoomValue = searchRoomTerm.toLowerCase();
-
-    return (
-      (nombre.toLowerCase().includes(searchValue) ||
-       apellido.toLowerCase().includes(searchValue) ||
-       dni.toString().includes(searchValue)) &&
-      NroHabitacion.toString().includes(searchRoomValue)
-    );
-  });
-
   return (
-    <div>
+    <>
       <header style={{ backgroundColor: '#556B2F' }}>
         <div className="flex-container">
           <div>
@@ -121,7 +120,7 @@ const Reserva = () => {
           value={searchRoomTerm}
           onChange={handleSearchTermChange}
         />
-        {filteredReservas.map((reserva) => (
+        {reservas.map((reserva) => (
           <div key={reserva.idReserva} className="reserva-card">
             <h3>Habitación {reserva.NroHabitacion}</h3>
             <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
@@ -131,7 +130,7 @@ const Reserva = () => {
               <button onClick={() => handleCheckOut(reserva)} style={{backgroundColor:'#556B2F'}}>Check Out</button>
             </div>
           </div>
-        ))}
+        ))} 
 
         <Modal show={showModal} onHide={closeReservaModal}>
           <Modal.Header closeButton>
@@ -150,14 +149,13 @@ const Reserva = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-
-        <AgregarReserva ReservaCreada={handleReservaCreada} /> {/* Componente AgregarReserva con prop */}
         
         <footer style={{ backgroundColor: '#556B2F', marginTop: '0%', height: '20px' }}>
           <p className="textFooter">TAREFF TEAM</p>
+          <Link to="/agregarReserva" className="custom-link btn btn-lg btn-primary" >agregar reserva</Link>
         </footer>
       </div>
-    </div>
+    </>
   );
 };
 
