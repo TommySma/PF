@@ -87,6 +87,28 @@ const Reserva = () => {
     }
   };
 
+  const filterReservas = () => {
+    let filteredReservas = [...reservas];
+
+    if (searchTerm) {
+      const searchRegex = new RegExp(searchTerm, 'i');
+      filteredReservas = filteredReservas.filter(
+        (reserva) =>
+          searchRegex.test(reserva.nombre) ||
+          searchRegex.test(reserva.apellido) ||
+          searchRegex.test(reserva.dni)
+      );
+    }
+
+    if (searchRoomTerm) {
+      filteredReservas = filteredReservas.filter(
+        (reserva) => reserva.NroHabitacion.toString() === searchRoomTerm
+      );
+    }
+
+    return filteredReservas;
+  };
+
   return (
     <>
       <header style={{ backgroundColor: '#556B2F' }}>
@@ -106,31 +128,35 @@ const Reserva = () => {
         </div>
       </header>
       <div>
-        <input
-          type="text"
-          placeholder="Buscar por nombre, apellido o DNI"
-          name="searchTerm"
-          value={searchTerm}
-          onChange={handleSearchTermChange}
-        />
-        <input
-          type="text"
-          placeholder="Buscar por número de habitación"
-          name="searchRoomTerm"
-          value={searchRoomTerm}
-          onChange={handleSearchTermChange}
-        />
-        {reservas.map((reserva) => (
+        <div style={{ marginTop: '1%' }}>
+          <input
+            type="text"
+            placeholder="Buscar por nombre, apellido o DNI"
+            name="searchTerm"
+            value={searchTerm}
+            onChange={handleSearchTermChange}
+            style={{ marginTop: '10px', marginBottom: '10px', marginLeft: '5px', borderColor: '#556B2F' }}
+          />
+          <input
+            type="text"
+            placeholder="Buscar por número de habitación"
+            name="searchRoomTerm"
+            value={searchRoomTerm}
+            onChange={handleSearchTermChange}
+            style={{ borderColor: '#556B2F' }}
+          />
+        </div>
+        {filterReservas().map((reserva) => (
           <div key={reserva.idReserva} className="reserva-card">
             <h3>Habitación {reserva.NroHabitacion}</h3>
             <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
             <div className="button-group">
-              <button onClick={() => showReservaModal(reserva)} style={{backgroundColor:'#556B2F'}}>Ver más</button>
-              <button onClick={() => handleCheckIn(reserva)} style={{backgroundColor:'#556B2F'}}>Check In</button>
-              <button onClick={() => handleCheckOut(reserva)} style={{backgroundColor:'#556B2F'}}>Check Out</button>
+              <button onClick={() => showReservaModal(reserva)} style={{ backgroundColor: '#556B2F' }}>Ver más</button>
+              <button onClick={() => handleCheckIn(reserva)} style={{ backgroundColor: '#556B2F' }}>Check In</button>
+              <button onClick={() => handleCheckOut(reserva)} style={{ backgroundColor: '#556B2F' }}>Check Out</button>
             </div>
           </div>
-        ))} 
+        ))}
 
         <Modal show={showModal} onHide={closeReservaModal}>
           <Modal.Header closeButton>
@@ -149,10 +175,11 @@ const Reserva = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-        
+
+        <Link to="/agregarReserva" className="custom-link btn btn-lg btn-primary" style={{ width: '330px', backgroundColor: '#556B2F', color: 'white', marginTop: '2%', marginBottom: '2%', marginLeft: '5px' }}>AGREGAR RESERVA</Link>
+
         <footer style={{ backgroundColor: '#556B2F', marginTop: '0%', height: '20px' }}>
           <p className="textFooter">TAREFF TEAM</p>
-          <Link to="/agregarReserva" className="custom-link btn btn-lg btn-primary" >agregar reserva</Link>
         </footer>
       </div>
     </>

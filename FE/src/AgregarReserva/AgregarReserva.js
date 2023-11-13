@@ -11,7 +11,7 @@ const AgregarReserva = ({ ReservaCreada }) => {
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
-    documento: '',
+    dni: '',
     fechaInicio: null,
     fechaFin: null,
     NroHabitacion: '',
@@ -60,11 +60,19 @@ const AgregarReserva = ({ ReservaCreada }) => {
 
   return (
     <div>
-      <header style={{ backgroundColor: '#556B2F' }}>
+      <header style={{ backgroundColor:'#556B2F' }}>
         <div className="flex-container">
-          <div></div>
+          <div>
+            <h1 className="textHeader1">
+              <b>
+                <Link style={{ color: 'white' }} to="/Reserva">
+                  ATRAS
+                </Link>
+              </b>
+            </h1>
+          </div>
           <center>
-            <h2 style={{ color: 'black' }}> RESERVA</h2>
+            <h2 style={{ Color: 'black' }}> AGREGAR RESERVAS</h2>
           </center>
         </div>
       </header>
@@ -98,7 +106,7 @@ const AgregarReserva = ({ ReservaCreada }) => {
               <Form.Control
                 type="number"
                 placeholder="Ingresa tu número de documento"
-                name="documento"
+                name="dni"
                 value= {formData.dni} velue = {formData.dni}
                 onChange={handleChange}
               />
