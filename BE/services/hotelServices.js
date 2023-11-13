@@ -101,9 +101,9 @@ export class hotelServices {
         try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .input('pEstado', habitacion.estadoReserva)
+            .input('pEstado', habitacion.Estado)
             .input('pId', idHabitacion)
-            .query("UPDATE Habitacion SET EstadoReserva=@pEstado WHERE idHabitacion = @pId");
+            .query("UPDATE Habitacion SET Estado =@pEstado WHERE idHabitacion = @pId");
         returnEntity = result.recordsets;
     
         console.log("FLECHA!!!", returnEntity);
