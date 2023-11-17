@@ -160,7 +160,8 @@ static insertReserva = async (reserva) => {
             .input('pApellido', reserva.apellido)
             .input('pDni', reserva.dni)
             .input('pNroHabitacion', reserva.NroHabitacion)
-            .query("INSERT INTO Reserva (fechaInicio,fechaFin,NroHabitacion,nombre,apellido,dni) VALUES (@pFechaIncio,@pFechaFin,@pNroHabitacion,@pNombre,@pApellido,@pDni)");
+            .input('pidHabitacion', reserva.idHabitacion)
+            .query("INSERT INTO Reserva (fechaInicio,fechaFin,NroHabitacion,nombre,apellido,dni,idHabitacion) VALUES (@pFechaIncio,@pFechaFin,@pNroHabitacion,@pNombre,@pApellido,@pDni,@pidHabitacion)");
         returnEntity = result.recordsets;
 
         console.log("FLECHA!!!", returnEntity);
@@ -177,7 +178,9 @@ static getAllReserva = async () => {
     try {
         let pool = await sql.connect(config);
         let result = await pool.request()
-            .query('SELECT * FROM Reserva');
+
+                .query('SELECT * FROM Reserva  INNER JOIN Habitacion ON Reserva.idHabitacion = Habitacion.idHabitacion');
+            console.log(result)
         returnEntity = result.recordsets[0];
     } catch (error) {
         console.log(error);

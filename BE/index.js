@@ -6,9 +6,8 @@ const app = express();
 import { hotelServices } from "./services/hotelServices.js";
 
 
-/*const express = require('express');
-const router = express.Router();
-const hotelServices = require('./path/hotelServices'); */
+
+//const router = express.Router();
 
 app.use(cors());
 
@@ -100,7 +99,7 @@ app.put('/habitacion', async (req, res) => {
 
 })
 
-/*router.put('/habitacion/:idHabitacion', async (req, res) => {
+app.put('/habitacion/:idHabitacion', async (req, res) => {
     const { idHabitacion } = req.params;
     const { estadoReserva } = req.body;
   
@@ -109,7 +108,7 @@ app.put('/habitacion', async (req, res) => {
     res.json(result);
   });
   
-  module.exports = router;*/
+  
 
 app.get('/habitacion/:id', async (req, res) => {
     console.log("asdasd", req.params);

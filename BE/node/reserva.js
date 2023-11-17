@@ -6,6 +6,7 @@ class reserva {
     apellido;
     NroHabitacion;  
     idReserva;
+    idHabitacion;
 }
 
 export default reserva;
