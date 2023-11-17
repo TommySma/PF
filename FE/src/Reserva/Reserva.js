@@ -9,6 +9,9 @@ import { habitacionContext } from '../habitacionContext';
 import AgregarReserva from '../AgregarReserva/AgregarReserva';
 
 const Reserva = () => {
+  const [habitaciones, setHabitaciones] = useState([]);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const [show, setShow] = useState(false);
   const [reservas, setReservas] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedReserva, setSelectedReserva] = useState(null);
@@ -27,7 +30,7 @@ const Reserva = () => {
 
   const fetchReservas = () => {
     axios
-      .get('http://localhost:5000/Reserva')
+      .get('http://localhost:5000/reserva')
       .then((response) => {
         setReservas(response.data);
         console.log(response.data);
@@ -36,6 +39,45 @@ const Reserva = () => {
         console.error(error);
       });
   };
+
+
+  const fetchHabitaciones = () => {
+    axios
+      .get('http://localhost:5000/Habitacion')
+      .then((response) => {
+        console.log(response);
+        setHabitaciones(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+
+  const handleClose = () => {
+    setShow(false);
+    setSelectedRoomId(null);
+  };
+
+
+  const changeRoomStatus = (newStatus) => {
+    if (selectedRoomId && newStatus) {
+      axios
+        .put(`http://localhost:5000/habitacion`, {
+          Estado: newStatus,
+          id: selectedRoomId,
+        })
+        .then((response) => {
+          console.log(response);
+          fetchHabitaciones();
+          handleClose();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+
 
   const showReservaModal = (reserva) => {
     setSelectedReserva(reserva);
@@ -47,24 +89,25 @@ const Reserva = () => {
     setShowModal(false);
   };
 
-  const handleRoomStatusChange = (NroHabitacion, newStatus) => {
+  const handleRoomStatusChange = (idHabitacion, newStatus) => {
     setEstadoHabitacion((prevStatus) => ({
       ...prevStatus,
-      [NroHabitacion]: newStatus,
+      [idHabitacion]: newStatus,
     }));
   };
 
   const handleCheckIn = async (reserva) => {
     try {
       const newStatus = 'O';
-      const idHabitacion = reserva.idHabitacion; // Asegúrate de que esta propiedad esté disponible en tu objeto reserva
+      const idHabitacion = reserva.idHabitacion; 
+      console.log(idHabitacion)
   
-      // Lógica para el Check In
-      await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { estadoReserva: newStatus });
+     
+      await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { Estado: newStatus });
   
-      // Actualiza localmente el estado de la habitación (opcional)
+      
       const updatedReservas = reservas.map((r) =>
-        r.idHabitacion === idHabitacion ? { ...r, estadoReserva: newStatus } : r
+        r.idHabitacion === idHabitacion ? { ...r, Estado: newStatus } : r
       );
       setReservas(updatedReservas);
     } catch (error) {
@@ -73,9 +116,20 @@ const Reserva = () => {
   };
 
   const handleCheckOut = async (reserva) => {
+    try {
     const newStatus = 'L'; 
-    const idHabitacion = reserva.NroHabitacion;
-    // Lógica para el Check Out
+    const idHabitacion = reserva.idHabitacion;
+
+    await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { estadoReserva: newStatus });
+  
+      
+      const updatedReservas = reservas.map((r) =>
+        r.idHabitacion === idHabitacion ? { ...r, estadoReserva: newStatus } : r
+      );
+      setReservas(updatedReservas);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSearchTermChange = (e) => {
@@ -153,7 +207,7 @@ const Reserva = () => {
             <div className="button-group">
               <button onClick={() => showReservaModal(reserva)} style={{ backgroundColor: '#556B2F' }}>Ver más</button>
               <button onClick={() => handleCheckIn(reserva)} style={{ backgroundColor: '#556B2F' }}>Check In</button>
-              <button onClick={() => handleCheckOut(reserva)} style={{ backgroundColor: '#556B2F' }}>Check Out</button>
+              <button onClick={() => changeRoomStatus('L')} style={{ backgroundColor: '#556B2F' }}>Check Out</button>
             </div>
           </div>
         ))}
