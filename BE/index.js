@@ -99,14 +99,11 @@ app.put('/habitacion', async (req, res) => {
 
 })
 
-
-//RESOLVER EL APP.PUT PARA EL CHECKIN Y CHECKOUT
-//chequear con consoles.log si el error está aca o en el boton del front
 app.put('/habitacion/:idHabitacion', async (req, res) => {
     const { idHabitacion } = req.params;
-    const { estadoReserva } = req.body;
+    const estadoReserva = req.body.Estado;
   
-    const result = await hotelServices.updateHab(idHabitacion, { estadoReserva });
+    const result = await hotelServices.updateHab(idHabitacion, { Estado: estadoReserva });
   
     res.json(result);
   });

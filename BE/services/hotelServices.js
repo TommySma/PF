@@ -95,7 +95,6 @@ export class hotelServices {
     
     static updateHab = async (idHabitacion, habitacion) => {
         let returnEntity = null;
-        console.log("FLECHITA!!!");
         console.log(habitacion, idHabitacion);
         console.log('Estoy en: hotelServices.update(idHabitacion)');
         try {
@@ -159,9 +158,8 @@ static insertReserva = async (reserva) => {
             .input('pNombre', reserva.nombre)
             .input('pApellido', reserva.apellido)
             .input('pDni', reserva.dni)
-            .input('pNroHabitacion', reserva.NroHabitacion)
             .input('pidHabitacion', reserva.idHabitacion)
-            .query("INSERT INTO Reserva (fechaInicio,fechaFin,NroHabitacion,nombre,apellido,dni,idHabitacion) VALUES (@pFechaIncio,@pFechaFin,@pNroHabitacion,@pNombre,@pApellido,@pDni,@pidHabitacion)");
+            .query("INSERT INTO Reserva (fechaInicio,fechaFin,nombre,apellido,dni,idHabitacion) VALUES (@pFechaIncio,@pFechaFin,@pNombre,@pApellido,@pDni,@pidHabitacion)");
         returnEntity = result.recordsets;
 
         console.log("FLECHA!!!", returnEntity);
@@ -179,7 +177,7 @@ static getAllReserva = async () => {
         let pool = await sql.connect(config);
         let result = await pool.request()
 
-                .query('SELECT * FROM Reserva  INNER JOIN Habitacion ON Reserva.idHabitacion = Habitacion.idHabitacion');
+                .query('SELECT r.*, h.Estado, h.numeroHab FROM Reserva as r INNER JOIN Habitacion h ON r.idHabitacion = h.idHabitacion');
             console.log(result)
         returnEntity = result.recordsets[0];
     } catch (error) {
