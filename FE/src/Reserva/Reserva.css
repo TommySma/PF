@@ -47,6 +47,10 @@
   cursor: pointer;
 }
 
+.button-group button:disabled {
+  display: none;
+}
+
 .button-group button:hover {
   background-color: #0056b3;
 }

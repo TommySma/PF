@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const AgregarReserva = ({ ReservaCreada }) => {
   const navigate = useNavigate();
+  const [habitaciones, setHabitaciones] = useState([]);
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -17,6 +18,22 @@ const AgregarReserva = ({ ReservaCreada }) => {
     NroHabitacion: '',
     idReserva: ''
   });
+
+  useEffect(() => {
+    fetchHabitaciones();
+  }, []);
+
+  const fetchHabitaciones = () => {
+    axios
+      .get('http://localhost:5000/Habitacion')
+      .then((response) => {
+        console.log(response);
+        setHabitaciones(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +63,7 @@ const AgregarReserva = ({ ReservaCreada }) => {
           dni: '',
           fechaInicio: null,
           fechaFin: null,
-          NroHabitacion: '',
+          idHabitacion: '',
           idReserva: ''
         });
         let nuevaReserva = response.data;
@@ -114,13 +131,11 @@ const AgregarReserva = ({ ReservaCreada }) => {
 
             <Form.Group controlId="NroHabitacion">
               <Form.Label>Número de Habitacion</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Ingresa tu número de Habitacion"
-                name="NroHabitacion"
-                value={formData.NroHabitacion}
-                onChange={handleChange}
-              />
+
+              <Form.Select onChange={handleChange} name="idHabitacion" aria-label="Default select example">
+                <option>Habitación...</option>
+                { habitaciones.map(h => <option value={h.idHabitacion}>{h.numeroHab}</option>) }
+              </Form.Select>
             </Form.Group>
 
             <Form.Group controlId="fechaInicio">

@@ -202,11 +202,11 @@ const Reserva = () => {
         </div>
         {filterReservas().map((reserva) => (
           <div key={reserva.idReserva} className="reserva-card">
-            <h3>Habitación {reserva.NroHabitacion}</h3>
+            <h3>Habitación {reserva.numeroHab}</h3>
             <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
             <div className="button-group">
               <button onClick={() => showReservaModal(reserva)} style={{ backgroundColor: '#556B2F' }}>Ver más</button>
-              <button onClick={() => handleCheckIn(reserva)} style={{ backgroundColor: '#556B2F' }}>Check In</button>
+              <button disabled={ reserva.Estado === 'O' ? 'disabled' : false } onClick={() => handleCheckIn(reserva)} style={{ backgroundColor: '#556B2F' }}>Check In</button>
               <button onClick={() => changeRoomStatus('L')} style={{ backgroundColor: '#556B2F' }}>Check Out</button>
             </div>
           </div>
