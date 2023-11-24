@@ -16,9 +16,13 @@ const Reserva = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedReserva, setSelectedReserva] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchRoomTerm, setSearchRoomTerm] = useState('');
+  const [searchRoomTerm, setSearchRoomTerm] = useState();
+  const [message, setMessage] = useState();
   const { estadoHabitacion, setEstadoHabitacion } = useContext(habitacionContext);
   const location = useLocation();
+
+
+  const handleShow = () => setShow(true);
 
   const handleReservaCreada = (nuevaReserva) => {
     setReservas([...reservas, nuevaReserva]);
@@ -58,6 +62,20 @@ const Reserva = () => {
     setShow(false);
     setSelectedRoomId(null);
   };
+
+
+  const deleteReserva = (idReserva) => {
+    axios
+      .delete(`http://localhost:5000/Reserva/${idReserva}`)
+      .then((response) => {
+        console.log("entro al reserva")
+        fetchReservas(); 
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
 
 
   const changeRoomStatus = (newStatus) => {
@@ -102,6 +120,25 @@ const Reserva = () => {
       const idHabitacion = reserva.idHabitacion; 
       console.log(idHabitacion)
   
+      
+       await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { Estado: newStatus }) ;
+      
+      
+      const updatedReservas = reservas.map((r) =>
+       r.idHabitacion === idHabitacion ? { ...r, Estado: newStatus } : r
+      );
+      setReservas(updatedReservas);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleCheckOut = async (reserva) => {
+    try {
+      const newStatus = 'L';
+      const idHabitacion = reserva.idHabitacion; 
+      console.log(idHabitacion)
+  
      
       await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { Estado: newStatus });
   
@@ -115,30 +152,13 @@ const Reserva = () => {
     }
   };
 
-  const handleCheckOut = async (reserva) => {
-    try {
-    const newStatus = 'L'; 
-    const idHabitacion = reserva.idHabitacion;
-
-    await axios.put(`http://localhost:5000/habitacion/${idHabitacion}`, { estadoReserva: newStatus });
-  
-      
-      const updatedReservas = reservas.map((r) =>
-        r.idHabitacion === idHabitacion ? { ...r, estadoReserva: newStatus } : r
-      );
-      setReservas(updatedReservas);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleSearchTermChange = (e) => {
     const { name, value } = e.target;
     if (name === 'searchTerm') {
       setSearchTerm(value);
-    } else if (name === 'searchRoomTerm') {
+    } /*else if (name === 'searchRoomTerm') {
       setSearchRoomTerm(value);
-    }
+    }*/
   };
 
   const filterReservas = () => {
@@ -191,26 +211,45 @@ const Reserva = () => {
             onChange={handleSearchTermChange}
             style={{ marginTop: '10px', marginBottom: '10px', marginLeft: '5px', borderColor: '#556B2F' }}
           />
-          <input
-            type="text"
-            placeholder="Buscar por número de habitación"
-            name="searchRoomTerm"
-            value={searchRoomTerm}
-            onChange={handleSearchTermChange}
-            style={{ borderColor: '#556B2F' }}
-          />
+          
         </div>
         {filterReservas().map((reserva) => (
           <div key={reserva.idReserva} className="reserva-card">
             <h3>Habitación {reserva.numeroHab}</h3>
             <p>Reserva: {`${reserva.nombre} ${reserva.apellido}`}</p>
-            <div className="button-group">
+
+            <p>{message}</p>
+            <div className="button-group"> 
               <button onClick={() => showReservaModal(reserva)} style={{ backgroundColor: '#556B2F' }}>Ver más</button>
-              <button disabled={ reserva.Estado === 'O' ? 'disabled' : false } onClick={() => handleCheckIn(reserva)} style={{ backgroundColor: '#556B2F' }}>Check In</button>
-              <button onClick={() => changeRoomStatus('L')} style={{ backgroundColor: '#556B2F' }}>Check Out</button>
+              <button disabled={ reserva.Estado === 'O' ? 'disabled' : false } onClick={() => reserva.Estado === 'L' ? handleCheckIn(reserva) : handleShow() } style={{ backgroundColor: '#556B2F' }}>Check In</button>
+              <button disabled={ reserva.Estado === 'L' ? 'disabled' : false } onClick={() => reserva.Estado === 'O' ? handleCheckOut(reserva) : handleShow() } style={{ backgroundColor: '#556B2F' }}>Check Out</button>
+             {/* <button
+                      className="button Reserva-delete"
+                      onClick={() => deleteReserva(reserva.idReserva)}
+                      style={{width:'200px' ,backgroundColor: '#556B2F', color: 'white', display: 'inline-block', borderRadius: '15px', boxShadow: '9px 9px 9px #999', marginTop:'5px', marginLeft:'700px'}}
+                    >
+                      ELIMINAR
+                    </button>*/}
+            
             </div>
           </div>
         ))}
+
+
+
+        <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>CHECK NO DISPONIBLE</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>LA HABITACION ESTÁ FUERA DE SERVICIO</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
 
         <Modal show={showModal} onHide={closeReservaModal}>
           <Modal.Header closeButton>

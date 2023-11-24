@@ -142,7 +142,7 @@ const Habitaciones = () => {
             onClick={() => {changeRoomStatus('R');}}
             style={{ margin: '5px' }}
           >
-            Reservada
+            Fuera de servicio
           </Button>
           <Button
             variant="danger"

@@ -147,3 +147,15 @@ app.get('/Reserva/:id', async (req, res) => {
     res.status(200).send(Reserva)    
 
 })
+
+app.delete('/Reserva/:id', async (req, res) => {
+    try {
+        console.log("Entro al borrar");
+        await hotelServices.deleteByIdReserva(req.params.id);
+        res.status(200).json({ message: 'Reserva Eliminada'});
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({ error: 'Fallo el delete' });
+
+    }
+})

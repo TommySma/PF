@@ -200,7 +200,28 @@ static getByIdReserva = async (idReserva) => {
     }
     return returnEntity;
 }
+
+static deleteByIdReserva = async (idReserva) => {
+    let rowsAffected = 0;
+    console.log('Estoy en: hotelServices.deleteBy(idReserva)');
+    console.log(idReserva+"csacsa" );
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('pId', sql.Int, idReserva)
+            .query('DELETE FROM Reserva WHERE idReserva = @pId');
+        rowsAffected = result.rowsAffected;
+        console.log(rowsAffected)
+    } catch (error) {
+        console.log(error)
+    }
+    return rowsAffected;
 }
+
+
+
+}
+
 
 
 //-----------------------------------------------------------Usuarios------------------------------------------------------------------------//
