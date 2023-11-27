@@ -186,6 +186,24 @@ static getAllReserva = async () => {
     return returnEntity;
 }
 
+static getReservaByFechaYHabitacion = async (reserva) => {
+    let returnEntity = null;
+    console.log('Estoy en: hotelServices.getReservaByFechaYHabitacion()');
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+                .input('pInicio', reserva.fechaInicio)
+                .input('pFin', reserva.fechaFin)
+                .input('pHab', reserva.idHabitacion)   
+                .query('SELECT r.*, h.Estado, h.numeroHab FROM Reserva as r INNER JOIN Habitacion h ON r.idHabitacion = h.idHabitacion WHERE ((@pInicio between r.fechaInicio and r.fechafin) OR (dateadd(DAY, -1, @pFin) between r.fechaInicio and r.fechaFin) ) and r.idHabitacion = @pHab');
+            console.log(result)
+        returnEntity = result.recordsets[0];
+    } catch (error) {
+        console.log(error);
+    }
+    return returnEntity;
+}
+
 static getByIdReserva = async (idReserva) => {
     let returnEntity = null;
     console.log('Estoy en: hotelServices.GetById(idReserva)');

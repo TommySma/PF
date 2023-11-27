@@ -5,10 +5,16 @@ import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Modal from 'react-bootstrap/Modal';
+
 
 const AgregarReserva = ({ ReservaCreada }) => {
   const navigate = useNavigate();
   const [habitaciones, setHabitaciones] = useState([]);
+  const [show, setShow] = useState(false);
+  const [selectedRoomId, setSelectedRoomId] = useState(null);
+  const[type, setType] = useState("");
   const [formData, setFormData] = useState({
     nombre: '',
     apellido: '',
@@ -33,6 +39,13 @@ const AgregarReserva = ({ ReservaCreada }) => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const handleCambiarType = () => setType("submit");
+  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+    setSelectedRoomId(null);
   };
 
   const handleChange = (e) => {
@@ -69,7 +82,7 @@ const AgregarReserva = ({ ReservaCreada }) => {
         let nuevaReserva = response.data;
         navigate('/Reserva', { state: { nuevaReserva } });
         //return ReservaCreada(response.data); // Suponiendo que el servidor devuelve la reserva creada
-      })
+      }, error => alert("Ya existe una reserva para esa habitación en esa fecha!"))
       .catch((error) => {
         console.error(error);
       });
@@ -95,8 +108,10 @@ const AgregarReserva = ({ ReservaCreada }) => {
       </header>
       <body>
         <>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="nombre">
+      <Form onSubmit={handleSubmit}>
+        <ListGroup as="ol" numbered>
+        <ListGroup.Item as="li">
+          <Form.Group controlId="nombre">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"
@@ -106,8 +121,10 @@ const AgregarReserva = ({ ReservaCreada }) => {
                 onChange={handleChange}
               />
             </Form.Group>
+            </ListGroup.Item>
 
-            <Form.Group controlId="apellido">
+        <ListGroup.Item as="li">
+          <Form.Group controlId="apellido">
               <Form.Label>Apellido</Form.Label>
               <Form.Control
                 type="text"
@@ -117,8 +134,12 @@ const AgregarReserva = ({ ReservaCreada }) => {
                 onChange={handleChange}
               />
             </Form.Group>
+            </ListGroup.Item>
 
-            <Form.Group controlId="dni">
+
+
+        <ListGroup.Item as="li">
+          <Form.Group controlId="dni">
               <Form.Label>Número de Documento</Form.Label>
               <Form.Control
                 type="number"
@@ -128,17 +149,23 @@ const AgregarReserva = ({ ReservaCreada }) => {
                 onChange={handleChange}
               />
             </Form.Group>
-
-            <Form.Group controlId="NroHabitacion">
+            </ListGroup.Item>
+     
+         
+      <ListGroup.Item as="li">
+      <Form.Group controlId="NroHabitacion">
               <Form.Label>Número de Habitacion</Form.Label>
 
               <Form.Select onChange={handleChange} name="idHabitacion" aria-label="Default select example">
                 <option>Habitación...</option>
-                { habitaciones.map(h => <option value={h.idHabitacion}>{h.numeroHab}</option>) }
+                { habitaciones.map(h => h.Estado === "R" ? <option value={null}>HABITACION FUERA DE SERVICIO</option> : <option value={h.idHabitacion}>{h.numeroHab }</option> ) }
               </Form.Select>
             </Form.Group>
+      </ListGroup.Item>
 
-            <Form.Group controlId="fechaInicio">
+
+      <ListGroup.Item as="li">
+      <Form.Group controlId="fechaInicio">
               <Form.Label>Fecha de Inicio de Reserva</Form.Label>
               <DatePicker
                 selected={formData.fechaInicio}
@@ -146,8 +173,11 @@ const AgregarReserva = ({ ReservaCreada }) => {
                 dateFormat="dd-MM-yyyy"
               />
             </Form.Group>
+      </ListGroup.Item>
+   
 
-            <Form.Group controlId="fechaFin">
+      <ListGroup.Item as="li">
+      <Form.Group controlId="fechaFin">
               <Form.Label>Fecha de Fin de Reserva</Form.Label>
               <DatePicker
                 selected={formData.fechaFin}
@@ -155,13 +185,32 @@ const AgregarReserva = ({ ReservaCreada }) => {
                 dateFormat="dd-MM-yyyy"
               />
             </Form.Group>
+      </ListGroup.Item>
+      </ListGroup>
 
-            <Button variant="primary" type="submit">
+
+          { /*habitaciones.map(h => h.Estado === "R" ? handleShow() : handleCambiarType() ) */}
+
+          <Button  variant="primary" type={ "submit"/*(type)*/}  style={{ backgroundColor: '#556B2F' }}>
               Guardar Reserva
             </Button>
           </Form>
         </>
       </body>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>CHECK NO DISPONIBLE</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>LA HABITACION ESTÁ FUERA DE SERVICIO</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
     </div>
   );
 };

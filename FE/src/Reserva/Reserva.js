@@ -256,10 +256,11 @@ const Reserva = () => {
             <Modal.Title>Detalles de la Reserva</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>Nombre: {selectedReserva && `${selectedReserva.nombre} ${selectedReserva.apellido}`}</p>
+            <p>Nombre: {selectedReserva && `${selectedReserva.nombre} `}</p>
+            <p>Apellido: {selectedReserva && `${selectedReserva.apellido}`}</p>
             <p>Fecha de Inicio: {selectedReserva && selectedReserva.fechaInicio}</p>
             <p>Fecha de Fin: {selectedReserva && selectedReserva.fechaFin}</p>
-            <p>Habitación: {selectedReserva && selectedReserva.NroHabitacion}</p>
+            <p>Habitación: {selectedReserva && selectedReserva.numeroHab}</p>
             <p>dni: {selectedReserva && selectedReserva.dni}</p>
           </Modal.Body>
           <Modal.Footer>

@@ -126,13 +126,18 @@ app.get('/habitacion', async (req, res) => {
 
 
 app.post('/reserva', async (req, res) => {
-    console.log("en post, req:", req)
     try {
-        await hotelServices.insertReserva(req.body)
+        const hayReservasExistentes = await hotelServices.getReservaByFechaYHabitacion(req.body);
+
+        if (!hayReservasExistentes?.length) {
+            await hotelServices.insertReserva(req.body);
+        } else {
+            throw new Error("Ya hay una reserva en esa fecha")
+        }
         res.status(200).json({ message: 'reserva creada' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Fallo el insert' });
+        res.status(500).json({ error: error.message });
     }
 })  
 
